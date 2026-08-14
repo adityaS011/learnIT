@@ -31,7 +31,7 @@ export default async function TopicPage({
           className="text-xs font-semibold uppercase tracking-wider"
           style={{ color: "var(--accent)" }}
         >
-          Part {part.number}
+          {part.category} · Topic {part.order}
         </span>
         <h1 className="mt-1 flex items-center gap-3 text-2xl font-extrabold sm:text-3xl">
           <span>{part.emoji}</span>
@@ -70,6 +70,6 @@ export default async function TopicPage({
   );
 }
 
-function adj(p: { slug: string; title: string; number: number }) {
-  return { slug: p.slug, title: p.title, number: p.number };
+function adj(p: { slug: string; title: string }) {
+  return { slug: p.slug, title: p.title };
 }

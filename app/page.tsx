@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getParts } from "@/lib/content";
+import { getParts, getPartsByCategory } from "@/lib/content";
 import { QUIZZES } from "@/lib/quizzes";
 import HomeProgress from "@/components/HomeProgress";
 
 export default function Home() {
   const parts = getParts();
+  const groups = getPartsByCategory();
   const totalSections = parts.reduce((a, p) => a + p.sections.length, 0);
   const totalQuestions = Object.values(QUIZZES).reduce((a, q) => a + q.length, 0);
 
@@ -56,34 +57,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Topic grid */}
-      <h2 className="mb-4 text-xl font-bold">Course topics</h2>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {parts.map((p) => {
-          const qCount = QUIZZES[p.slug]?.length ?? 0;
-          return (
-            <Link
-              key={p.slug}
-              href={`/topic/${p.slug}`}
-              className="group flex flex-col rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg"
-              style={{ borderColor: "var(--border)", background: "var(--bg-soft)" }}
+      {/* Topics grouped by category */}
+      <h2 className="mb-1 text-xl font-bold">The curriculum</h2>
+      <p className="mb-6 text-sm" style={{ color: "var(--muted)" }}>
+        Work top to bottom, or jump to any topic. Each one ends with a quiz.
+      </p>
+
+      <div className="flex flex-col gap-8">
+        {groups.map((g) => (
+          <section key={g.category}>
+            <h3
+              className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-widest"
+              style={{ color: "var(--accent)" }}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-2xl">{p.emoji}</span>
-                <span className="text-xs font-mono" style={{ color: "var(--muted)" }}>
-                  Part {p.number}
-                </span>
-              </div>
-              <h3 className="mt-3 font-bold leading-snug group-hover:text-[var(--accent)]">
-                {p.title}
-              </h3>
-              <div className="mt-auto flex items-center gap-3 pt-4 text-xs" style={{ color: "var(--muted)" }}>
-                <span>📄 {p.sections.length} lessons</span>
-                {qCount > 0 && <span>🧠 {qCount} quiz Qs</span>}
-              </div>
-            </Link>
-          );
-        })}
+              {g.category}
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                style={{ background: "var(--accent-soft)" }}
+              >
+                {g.parts.length}
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {g.parts.map((p) => {
+                const qCount = QUIZZES[p.slug]?.length ?? 0;
+                return (
+                  <Link
+                    key={p.slug}
+                    href={`/topic/${p.slug}`}
+                    className="group flex flex-col rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                    style={{ borderColor: "var(--border)", background: "var(--bg-soft)" }}
+                  >
+                    <span className="text-2xl">{p.emoji}</span>
+                    <h4 className="mt-3 font-bold leading-snug group-hover:text-[var(--accent)]">
+                      {p.title}
+                    </h4>
+                    <div className="mt-auto flex items-center gap-3 pt-4 text-xs" style={{ color: "var(--muted)" }}>
+                      <span>📄 {p.sections.length} lessons</span>
+                      {qCount > 0 && <span>🧠 {qCount} Qs</span>}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );

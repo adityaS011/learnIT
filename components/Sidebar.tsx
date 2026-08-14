@@ -7,11 +7,20 @@ import { getProgress } from "@/lib/progress";
 
 export type NavPart = {
   slug: string;
-  number: number;
+  order: number;
   title: string;
   emoji: string;
+  category: string;
   sectionCount: number;
 };
+
+const CATEGORY_ORDER = [
+  "Fundamentals",
+  "React",
+  "Engineering",
+  "Architecture",
+  "Interview",
+];
 
 export default function Sidebar({
   nav,
@@ -34,9 +43,13 @@ export default function Sidebar({
 
   const doneCount = nav.filter((p) => done[p.slug]).length;
 
+  const groups = CATEGORY_ORDER.map((category) => ({
+    category,
+    parts: nav.filter((p) => p.category === category),
+  })).filter((g) => g.parts.length > 0);
+
   return (
     <>
-      {/* Mobile backdrop */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
@@ -60,52 +73,53 @@ export default function Sidebar({
           </button>
         </div>
 
-        <Link
-          href="/"
-          className={navItemClass(pathname === "/")}
-          style={navItemStyle(pathname === "/")}
-        >
+        <Link href="/" className={navItemClass(pathname === "/")} style={navItemStyle(pathname === "/")}>
           <span className="text-base">🏠</span>
           <span className="font-medium">Home</span>
         </Link>
-        <Link
-          href="/quiz"
-          className={navItemClass(pathname === "/quiz")}
-          style={navItemStyle(pathname === "/quiz")}
-        >
+        <Link href="/quiz" className={navItemClass(pathname === "/quiz")} style={navItemStyle(pathname === "/quiz")}>
           <span className="text-base">🧠</span>
           <span className="font-medium">All Quizzes</span>
         </Link>
 
         <div className="mt-4 flex items-center justify-between px-3 pb-1">
           <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "var(--muted)" }}>
-            Topics
+            Curriculum
           </span>
           <span className="text-[11px]" style={{ color: "var(--muted)" }}>
             {doneCount}/{nav.length}
           </span>
         </div>
 
-        <nav className="flex flex-col gap-0.5">
-          {nav.map((p) => {
-            const href = `/topic/${p.slug}`;
-            const active = pathname === href;
-            return (
-              <Link key={p.slug} href={href} className={navItemClass(active)} style={navItemStyle(active)}>
-                <span className="text-base">{p.emoji}</span>
-                <span className="min-w-0 flex-1 truncate">
-                  <span className="mr-1 text-xs opacity-60">{p.number}.</span>
-                  {p.title}
-                </span>
-                {done[p.slug] && <span className="text-xs text-green-500">✓</span>}
-              </Link>
-            );
-          })}
+        <nav className="flex flex-col gap-2">
+          {groups.map((g) => (
+            <div key={g.category}>
+              <div
+                className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-widest"
+                style={{ color: "var(--accent)" }}
+              >
+                {g.category}
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {g.parts.map((p) => {
+                  const href = `/topic/${p.slug}`;
+                  const active = pathname === href;
+                  return (
+                    <Link key={p.slug} href={href} className={navItemClass(active)} style={navItemStyle(active)}>
+                      <span className="text-base">{p.emoji}</span>
+                      <span className="min-w-0 flex-1 truncate">{p.title}</span>
+                      {done[p.slug] && <span className="text-xs text-green-500">✓</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         <p className="mt-6 px-3 text-[11px] leading-relaxed" style={{ color: "var(--muted)" }}>
-          Frontend engineering & interview prep. Read a topic, then test yourself
-          with its quiz.
+          Read a topic, then test yourself with its quiz. Everything you need for
+          a frontend theory / technical discussion round.
         </p>
       </aside>
     </>

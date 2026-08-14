@@ -25,9 +25,10 @@ export default function RootLayout({
 }) {
   const parts = getParts().map((p) => ({
     slug: p.slug,
-    number: p.number,
+    order: p.order,
     title: p.title,
     emoji: p.emoji,
+    category: p.category,
     sectionCount: p.sections.length,
   }));
 

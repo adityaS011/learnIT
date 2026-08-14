@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { isDone, setDone } from "@/lib/progress";
 
-type Adj = { slug: string; title: string; number: number } | null;
+type Adj = { slug: string; title: string } | null;
 
 export default function TopicActions({
   slug,
@@ -49,9 +49,7 @@ export default function TopicActions({
             style={{ borderColor: "var(--border)" }}
           >
             <span style={{ color: "var(--muted)" }}>← Previous</span>
-            <div className="mt-0.5 font-semibold">
-              {prev.number}. {prev.title}
-            </div>
+            <div className="mt-0.5 font-semibold">{prev.title}</div>
           </Link>
         ) : (
           <span />
@@ -63,9 +61,7 @@ export default function TopicActions({
             style={{ borderColor: "var(--border)" }}
           >
             <span style={{ color: "var(--muted)" }}>Next →</span>
-            <div className="mt-0.5 font-semibold">
-              {next.number}. {next.title}
-            </div>
+            <div className="mt-0.5 font-semibold">{next.title}</div>
           </Link>
         ) : (
           <span />
