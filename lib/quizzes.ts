@@ -237,6 +237,328 @@ export const QUIZZES: Record<string, Question[]> = {
       explanation:
         "One listener on a parent handles events from many (even dynamically-added) children via event.target/closest — fewer listeners, better for large lists.",
     },
+    {
+      q: "Which browser phase enables event delegation to work?",
+      options: [
+        "Event capturing only",
+        "Event bubbling — the event propagates up to ancestors",
+        "The repaint phase",
+        "The garbage collection phase",
+      ],
+      answer: 1,
+      explanation:
+        "After hitting the target, events bubble up through ancestors, so a single parent listener 'sees' events from all descendants and can inspect event.target.",
+    },
+    {
+      q: "How does JavaScript's garbage collector decide what to free?",
+      options: [
+        "It frees objects after a fixed timeout",
+        "It frees objects no longer reachable from a root (mark-and-sweep)",
+        "The developer manually calls free()",
+        "It frees the oldest objects first regardless of use",
+      ],
+      answer: 1,
+      explanation:
+        "JS engines use reachability: starting from roots (globals, call stack), they mark everything reachable and sweep the rest. Unreachable ≠ unreferenced-count; cycles are still collected.",
+    },
+    {
+      q: "What does a generator function (function*) let you do?",
+      options: [
+        "Run code on a separate thread",
+        "Pause and resume execution with yield, producing values lazily",
+        "Automatically cache return values",
+        "Convert a callback into a Promise",
+      ],
+      answer: 1,
+      explanation:
+        "Calling a generator returns an iterator; each next() runs until the next yield and pauses, keeping local state. Great for lazy sequences and custom iterables.",
+    },
+    {
+      q: "An object is 'iterable' (usable in for...of) when it:",
+      options: [
+        "Is an array",
+        "Implements a [Symbol.iterator]() method returning an iterator",
+        "Has a length property",
+        "Is created with new",
+      ],
+      answer: 1,
+      explanation:
+        "for...of, spread, and destructuring look up Symbol.iterator. Arrays, strings, Maps and Sets provide it built-in; you can add it to your own objects (often via a generator).",
+    },
+    {
+      q: "What does currying transform a function into?",
+      options: [
+        "A function that runs asynchronously",
+        "A sequence of functions each taking one argument, e.g. f(a)(b)(c)",
+        "A memoized function",
+        "A function with no arguments",
+      ],
+      answer: 1,
+      explanation:
+        "Currying rewrites f(a, b, c) as f(a)(b)(c). Partial application fixes some arguments now and supplies the rest later — both enable reuse and composition.",
+    },
+    {
+      q: "A key difference between WeakMap and Map is that WeakMap:",
+      options: [
+        "Can use any value as a key",
+        "Holds keys weakly (only objects), so entries are GC'd when the key is unreachable",
+        "Is faster for iteration",
+        "Keeps its keys alive forever",
+      ],
+      answer: 1,
+      explanation:
+        "WeakMap keys must be objects and are held weakly — if nothing else references the key, the entry is garbage-collected. It's non-iterable and ideal for private/associated metadata without leaks.",
+    },
+    {
+      q: "Debounce and throttle differ in that:",
+      options: [
+        "They are identical",
+        "Debounce fires once after activity stops; throttle fires at most once per interval during activity",
+        "Throttle waits for a pause; debounce fires continuously",
+        "Only debounce uses setTimeout",
+      ],
+      answer: 1,
+      explanation:
+        "Debounce = wait for silence then run (search input). Throttle = cap the rate to once per N ms during continuous events (scroll, resize, mousemove).",
+    },
+    {
+      q: "Why isn't spread ({ ...obj }) a deep copy?",
+      options: [
+        "It copies nothing",
+        "It duplicates only the top level; nested objects/arrays stay shared by reference",
+        "It removes nested keys",
+        "It freezes the original",
+      ],
+      answer: 1,
+      explanation:
+        "Shallow copy duplicates one level. Nested references are shared, so mutating them affects the original. Use structuredClone(obj) (or a recursive clone) for a true deep copy.",
+    },
+    {
+      q: "Which is a common JavaScript memory-leak cause?",
+      options: [
+        "Using const instead of let",
+        "Lingering references: uncleared timers, forgotten event listeners, or unbounded caches/closures",
+        "Calling functions too often",
+        "Using arrow functions",
+      ],
+      answer: 1,
+      explanation:
+        "The GC can't free memory that's still reachable. Detached DOM nodes held by closures, intervals never cleared, and ever-growing global caches keep objects alive — clean up on teardown.",
+    },
+    {
+      q: "When should you reach for a Web Worker?",
+      options: [
+        "To update the DOM faster",
+        "To run CPU-heavy work on a background thread so the main/UI thread stays responsive",
+        "To make network requests smaller",
+        "To replace Promises",
+      ],
+      answer: 1,
+      explanation:
+        "Workers run scripts on a separate thread and communicate via postMessage. Use them for heavy computation (parsing, image/crypto work); they have no DOM access.",
+    },
+    {
+      q: "In the event loop, which drains completely before the next macrotask runs?",
+      options: [
+        "Macrotasks (setTimeout, setInterval, I/O)",
+        "The microtask queue (Promise callbacks, queueMicrotask, MutationObserver)",
+        "requestAnimationFrame callbacks",
+        "They interleave one-for-one",
+      ],
+      answer: 1,
+      explanation:
+        "After each macrotask, the engine empties the ENTIRE microtask queue before rendering or running the next macrotask — which is why Promise callbacks run before setTimeout(…, 0).",
+    },
+  ],
+  "dom-events": [
+    {
+      q: "What's the difference between the result of querySelectorAll and getElementsByClassName?",
+      options: [
+        "They are identical",
+        "querySelectorAll returns a static NodeList; getElementsByClassName returns a live HTMLCollection",
+        "querySelectorAll is live; getElementsByClassName is static",
+        "Only getElementsByClassName supports CSS selectors",
+      ],
+      answer: 1,
+      explanation:
+        "querySelectorAll returns a static (snapshot) NodeList that supports forEach. getElementsByClassName/TagName return a LIVE HTMLCollection that auto-updates as the DOM changes.",
+    },
+    {
+      q: "For an <input value=\"Alice\">, after the user types \"Bob\", what does getAttribute('value') return?",
+      options: ['"Bob"', '"Alice"', '""', "undefined"],
+      answer: 1,
+      explanation:
+        "The attribute reflects the INITIAL/default HTML value ('Alice'). The live current value is the .value PROPERTY ('Bob'). Attributes = defaults, properties = current state.",
+    },
+    {
+      q: "In what order does a click event travel through the DOM?",
+      options: [
+        "Bubble → target → capture",
+        "Capture (document→parent) → target → bubble (target→document)",
+        "Only bubbling, never capturing",
+        "Target → capture → bubble",
+      ],
+      answer: 1,
+      explanation:
+        "Events go capture phase (down from document), then target phase, then bubble phase (up to document). addEventListener listens in bubble by default; pass {capture:true} for capture.",
+    },
+    {
+      q: "What does event.preventDefault() do?",
+      options: [
+        "Stops the event from bubbling to ancestors",
+        "Cancels the browser's default action (e.g. form submit, link navigation) but does NOT stop propagation",
+        "Removes all other listeners on the element",
+        "Both stops propagation and cancels the default",
+      ],
+      answer: 1,
+      explanation:
+        "preventDefault cancels the default action only. stopPropagation stops the event traveling further. They are independent — you often need both (e.g. a link that shouldn't navigate OR bubble).",
+    },
+    {
+      q: "Inside a delegated handler on a <ul>, which property gives the element that was actually clicked?",
+      options: ["event.currentTarget", "event.target", "this", "event.delegate"],
+      answer: 1,
+      explanation:
+        "event.target is the deepest element that triggered the event. event.currentTarget (=== this) is the element the listener is attached to (the <ul>). Use target.closest('li') to find the item.",
+    },
+    {
+      q: "Why does calling history.pushState() NOT trigger a popstate event?",
+      options: [
+        "It's a browser bug",
+        "popstate only fires on history navigation (back/forward); after pushState the router must render manually",
+        "pushState always reloads the page",
+        "popstate fires only on the first pushState",
+      ],
+      answer: 1,
+      explanation:
+        "popstate fires when the user navigates the history (back/forward or history.go). Your own pushState/replaceState changes the URL silently, so SPA routers render the new view themselves.",
+    },
+    {
+      q: "Which API efficiently detects when an element scrolls into the viewport (for lazy-loading)?",
+      options: ["ResizeObserver", "MutationObserver", "IntersectionObserver", "A scroll event listener"],
+      answer: 2,
+      explanation:
+        "IntersectionObserver asynchronously reports when a target enters/leaves the viewport or a root — no expensive scroll listeners. ResizeObserver watches element size; MutationObserver watches DOM changes.",
+    },
+    {
+      q: "Does fetch() reject its promise on an HTTP 404 or 500 response?",
+      options: [
+        "Yes, any error status rejects",
+        "No — it resolves; you must check res.ok. It only rejects on network failure",
+        "Only 500 rejects, 404 resolves",
+        "It throws synchronously",
+      ],
+      answer: 1,
+      explanation:
+        "fetch resolves for any response the server returns, including 4xx/5xx. Only network errors (offline, DNS, CORS block) reject. Always check res.ok before using the body.",
+    },
+  ],
+  "http-networking": [
+    {
+      q: "HTTP is described as 'stateless'. What does that mean?",
+      options: [
+        "It cannot transfer data",
+        "Each request is independent; the server keeps no memory of prior requests unless state is added via cookies/tokens",
+        "It only works once per session",
+        "It has no status codes",
+      ],
+      answer: 1,
+      explanation:
+        "Every HTTP request stands alone. 'Being logged in' is layered on top via cookies or tokens sent with each request — the protocol itself remembers nothing.",
+    },
+    {
+      q: "Which HTTP method is NOT idempotent (retrying can cause duplicate effects)?",
+      options: ["GET", "PUT", "DELETE", "POST"],
+      answer: 3,
+      explanation:
+        "POST is neither safe nor idempotent — retrying can create duplicates (e.g. double charge). GET is safe; PUT and DELETE are idempotent (same effect whether called once or many times), making them safe to retry.",
+    },
+    {
+      q: "What's the difference between HTTP 401 and 403?",
+      options: [
+        "They are interchangeable",
+        "401 = not authenticated (who are you?); 403 = authenticated but not allowed (you can't do this)",
+        "401 = server error; 403 = client error",
+        "403 means the page doesn't exist",
+      ],
+      answer: 1,
+      explanation:
+        "401 Unauthorized means you haven't proven who you are (log in). 403 Forbidden means you're identified but lack permission for this resource.",
+    },
+    {
+      q: "What does Cache-Control: no-cache actually mean?",
+      options: [
+        "Never store the response anywhere",
+        "Store it, but revalidate with the server before each use",
+        "Cache it forever",
+        "Only cache on the CDN",
+      ],
+      answer: 1,
+      explanation:
+        "no-cache stores the response but requires revalidation (via ETag/If-None-Match) before serving. The header that truly forbids storing is no-store.",
+    },
+    {
+      q: "When a cached resource is revalidated and unchanged, the server responds with:",
+      options: ["200 OK with the full body", "304 Not Modified with an empty body", "404 Not Found", "204 No Content"],
+      answer: 1,
+      explanation:
+        "With a matching ETag (If-None-Match) or timestamp, the server returns 304 Not Modified and no body — the browser reuses its cached copy, saving bandwidth.",
+    },
+    {
+      q: "Which pair counts as the SAME origin as https://app.com?",
+      options: [
+        "http://app.com",
+        "https://api.app.com",
+        "https://app.com:8080",
+        "https://app.com/dashboard",
+      ],
+      answer: 3,
+      explanation:
+        "Origin = scheme + host + port. A different path is still the same origin. Different scheme (http), subdomain (api.), or port (8080) are all DIFFERENT origins under the Same-Origin Policy.",
+    },
+    {
+      q: "A CORS error appears in the console. What actually happened?",
+      options: [
+        "The request never left the browser",
+        "The browser blocked JS from READING the response because the server didn't send permissive CORS headers",
+        "The server crashed",
+        "The request body was malformed",
+      ],
+      answer: 1,
+      explanation:
+        "CORS is browser-enforced. The request often reaches (and may run on) the server, but without Access-Control-Allow-Origin the browser hides the response from your JS. It's not a server-side block.",
+    },
+    {
+      q: "Before a POST with Content-Type: application/json to another origin, the browser sends:",
+      options: [
+        "Nothing extra",
+        "An OPTIONS preflight request to check the server allows the method/headers",
+        "A second identical POST",
+        "A GET to the same URL",
+      ],
+      answer: 1,
+      explanation:
+        "Non-simple requests (custom headers, JSON content-type, or methods beyond GET/POST/HEAD) trigger a CORS preflight OPTIONS request. Only if the server approves does the real request go out.",
+    },
+    {
+      q: "Which cookie flag prevents JavaScript from reading the cookie, protecting a token from XSS theft?",
+      options: ["Secure", "SameSite", "HttpOnly", "Path"],
+      answer: 2,
+      explanation:
+        "HttpOnly hides the cookie from document.cookie, so an XSS script can't steal it. Secure restricts it to HTTPS; SameSite is the CSRF defense. Auth tokens are best kept in HttpOnly, Secure, SameSite cookies.",
+    },
+    {
+      q: "Typing fast, the response for 'a' arrives after 'ab' and overwrites fresher results. The robust fix is:",
+      options: [
+        "Add more setTimeout",
+        "Cancel superseded requests with AbortController (and/or drop stale responses by tracking the latest)",
+        "Use synchronous XHR",
+        "Store results in localStorage",
+      ],
+      answer: 1,
+      explanation:
+        "This is a race condition. AbortController cancels the previous in-flight fetch; combined with a latest-wins id check and debouncing, stale responses can't clobber current state.",
+    },
   ],
   "react-fundamentals": [
     {

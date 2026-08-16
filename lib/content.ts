@@ -39,6 +39,8 @@ const MANIFEST: ManifestEntry[] = [
   { slug: "css", title: "CSS Fundamentals", emoji: "🎨", category: "Fundamentals", source: { type: "file", file: "css.md" } },
   { slug: "javascript", title: "JavaScript Core", emoji: "🟨", category: "Fundamentals", source: { type: "file", file: "javascript.md" } },
   { slug: "javascript-async", title: "JavaScript: Async & Advanced", emoji: "⚙️", category: "Fundamentals", source: { type: "file", file: "javascript-async.md" } },
+  { slug: "dom-events", title: "DOM, Events & Browser APIs", emoji: "🌳", category: "Fundamentals", source: { type: "file", file: "dom-events.md" } },
+  { slug: "http-networking", title: "HTTP, Networking & Web Security", emoji: "📡", category: "Fundamentals", source: { type: "file", file: "http-networking.md" } },
 
   // ── React ───────────────────────────────────────────────────────
   { slug: "react-fundamentals", title: "React Fundamentals", emoji: "⚛️", category: "React", source: { type: "ref", part: 1 } },
