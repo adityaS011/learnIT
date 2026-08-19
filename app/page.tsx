@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getParts, getPartsByCategory } from "@/lib/content";
 import { QUIZZES } from "@/lib/quizzes";
+import { hasLab } from "@/lib/labs";
 import HomeProgress from "@/components/HomeProgress";
 
 export default function Home() {
@@ -92,9 +93,17 @@ export default function Home() {
                     <h4 className="mt-3 font-bold leading-snug group-hover:text-[var(--accent)]">
                       {p.title}
                     </h4>
-                    <div className="mt-auto flex items-center gap-3 pt-4 text-xs" style={{ color: "var(--muted)" }}>
+                    <div className="mt-auto flex flex-wrap items-center gap-3 pt-4 text-xs" style={{ color: "var(--muted)" }}>
                       <span>📄 {p.sections.length} lessons</span>
                       {qCount > 0 && <span>🧠 {qCount} Qs</span>}
+                      {hasLab(p.slug) && (
+                        <span
+                          className="rounded-full px-2 py-0.5 font-semibold"
+                          style={{ background: "var(--accent-soft)", color: "var(--accent)" }}
+                        >
+                          🧪 Live lab
+                        </span>
+                      )}
                     </div>
                   </Link>
                 );

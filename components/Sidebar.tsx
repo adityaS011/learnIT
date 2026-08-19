@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getProgress } from "@/lib/progress";
+import { hasLab } from "@/lib/labs";
 
 export type NavPart = {
   slug: string;
@@ -108,6 +109,11 @@ export default function Sidebar({
                     <Link key={p.slug} href={href} className={navItemClass(active)} style={navItemStyle(active)}>
                       <span className="text-base">{p.emoji}</span>
                       <span className="min-w-0 flex-1 truncate">{p.title}</span>
+                      {hasLab(p.slug) && (
+                        <span className="text-xs" title="Has a live practice lab">
+                          🧪
+                        </span>
+                      )}
                       {done[p.slug] && <span className="text-xs text-green-500">✓</span>}
                     </Link>
                   );

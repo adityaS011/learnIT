@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import { getPart, getParts } from "@/lib/content";
 import { getQuiz } from "@/lib/quizzes";
+import { getLab } from "@/lib/labs";
 import Markdown from "@/components/Markdown";
 import Quiz from "@/components/Quiz";
 import TopicActions from "@/components/TopicActions";
+import LabCard from "@/components/LabCard";
 
 export function generateStaticParams() {
   return getParts().map((p) => ({ slug: p.slug }));
@@ -23,6 +25,7 @@ export default async function TopicPage({
   const prev = idx > 0 ? adj(all[idx - 1]) : null;
   const next = idx < all.length - 1 ? adj(all[idx + 1]) : null;
   const quiz = getQuiz(slug);
+  const lab = getLab(slug);
 
   return (
     <article className="mx-auto max-w-3xl">
@@ -42,6 +45,12 @@ export default async function TopicPage({
       {part.intro && (
         <div className="mb-6">
           <Markdown>{part.intro}</Markdown>
+        </div>
+      )}
+
+      {lab && (
+        <div className="mb-8">
+          <LabCard lab={lab} />
         </div>
       )}
 
